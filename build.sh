@@ -1,1 +1,1 @@
-docker build -t ubuntu-webtop:dev .
+docker build -t kribakarans/webtop .

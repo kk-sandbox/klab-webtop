@@ -6,10 +6,8 @@ vncconfig -iconic &
 # Set X window background
 xsetroot -solid grey
 
-# Run X window manager
-x-window-manager &
-
 # Run Gnome desktop
 metacity &
+xfdesktop &
 gnome-panel &
 gnome-session &
