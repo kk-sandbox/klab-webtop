@@ -1,4 +1,4 @@
-# Ubuntu webtop docker image
+# Run Ubuntu minimal desktop in docker container
 
 ### Pull webtop
 	docker push kribakarans/ubuntu-webtop:latest
