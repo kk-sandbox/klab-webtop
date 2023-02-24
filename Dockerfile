@@ -1,7 +1,7 @@
 # Docker file to build Ubuntu webtop
 
 # Webtop base image
-FROM ubuntu:focal
+FROM ubuntu:bionic
 
 # LABEL about the docker image
 LABEL description="Klab's Ubuntu webtop"
@@ -40,13 +40,12 @@ RUN apt-get update && \
 
 # Installing Gnome desktop
 RUN apt-get install -y --no-install-recommends \
-            ubuntu-desktop-minimal gnome-panel metacity xfdesktop4 \
-            adwaita-icon-theme-full yaru-theme-gtk
+            adwaita-icon-theme-full gnome-core gnome-panel metacity xfdesktop4
 
 # Installing additional packages
 RUN apt-get install -y --no-install-recommends \
-            cscope curl dbus-x11 file gcc gdb git git glances global gpg make sqlite3 sudo tig tree sqlite3 universal-ctags vim wget \
-            gedit gitk meld midori xterm
+            cscope curl dbus-x11  exuberant-ctags file gcc gdb git git glances global gpg make sqlite3 sudo tig tree sqlite3 vim wget \
+            firefox gedit gitk meld xterm
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Setting variables
@@ -62,22 +61,22 @@ RUN echo "${USER} ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/${USER} && \
     chmod 0440 /etc/sudoers.d/${USER}
 
 # Setting VNC for user
-RUN  mkdir -p $DIRVNC
+RUN  mkdir -p ${DIRVNC}
 COPY xstartvm /xstartvm
 RUN  chmod a+x /xstartvm
-COPY xstartup $DIRVNC/xstartup
+COPY xstartup ${DIRVNC}/xstartup
 RUN  touch ${DIRHOME}/.Xauthority
-RUN  chmod a+x $DIRVNC/xstartup
+RUN  chmod a+x ${DIRVNC}/xstartup
 RUN  chown -R ${USER}:${USER} ${DIRHOME}/.Xauthority
-RUN  echo "$VNC_PASSWD" | vncpasswd -f >> $DIRVNC/passwd && chmod 600 $DIRVNC/passwd
-RUN  chown -R ${USER}:${USER} $DIRVNC # Finally update the ownership to the user
+RUN  echo "${VNC_PASSWD}" | vncpasswd -f >> ${DIRVNC}/passwd && chmod 600 ${DIRVNC}/passwd
+RUN  chown -R ${USER}:${USER} ${DIRVNC} # Finally update the ownership to the user
 
 # Setting environments
 ENV USER ${USER}
 ENV VNC_PORT   5901
 ENV NOVNC_PORT 6901
-ENV VNC_PASSWD $VNC_PASSWD
 ENV VNC_RESOLUTION 1376x720
+ENV VNC_PASSWD ${VNC_PASSWD}
 
 # Setting entry point
 USER    ${USER}
